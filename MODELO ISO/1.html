@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MODELO OSI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #b19cd9; /* Lila pastel */
+            --secondary-color: #a8d8ea; /* Azul pastel */
+            --accent-color: #ffb6c1; /* Rosa pastel */
+            --light-color: #fffacd; /* Amarillo pastel claro */
+            --dark-color: #c8a2c8; /* Morado pastel */
+            --text-color: #5d5d5d; /* Gris suave */
+            --shadow: 0 8px 20px rgba(177, 156, 217, 0.15);
+            --gradient: linear-gradient(135deg, #b19cd9, #a8d8ea);
+            --gradient-light: linear-gradient(135deg, #ffb6c1, #fffacd);
+            --card-gradient: linear-gradient(135deg, #ffffff, #f8f7ff);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #f0f8ff 0%, #f5f0ff 100%);
+            min-height: 100vh;
+        }
+        
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1, h2, h3 {
+            margin-bottom: 1.2rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #ffffff, #e6e6fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        h2 {
+            font-size: 2.5rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.7rem;
+            margin-top: 2.5rem;
+            display: inline-block;
+            color: #6a5acd;
+        }
+        
+        h3 {
+            font-size: 1.8rem;
+            color: var(--secondary-color);
+        }
+        
+        p {
+            margin-bottom: 1.2rem;
+            font-size: 1.1rem;
+        }
+        
+        .intro {
+            font-size: 1.4rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #f0f8ff;
+            font-weight: 300;
+        }
+        
+        .card {
+            background: var(--card-gradient);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            border-left: 6px solid var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(177, 156, 217, 0.2);
+        }
+        
+        .nav-container {
+            background: var(--card-gradient);
+            border-radius: 16px;
+            padding: 1.8rem;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+            border: 1px solid rgba(177, 156, 217, 0.2);
+        }
+        
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--gradient-light);
+            color: #5d5d5d;
+            padding: 0.9rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-link:hover::before {
+            left: 100%;
+        }
+        
+        .nav-link:hover {
+            background: var(--dark-color);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(200, 162, 200, 0.4);
+        }
+        
+        .layers-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.8rem;
+        }
+        
+        .layer {
+            background: var(--card-gradient);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 8px solid var(--secondary-color);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .layer::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(168, 216, 234, 0.05) 0%, rgba(177, 156, 217, 0.05) 100%);
+            z-index: 0;
+        }
+        
+        .layer:hover {
+            transform: translateX(10px) translateY(-5px);
+            box-shadow: 0 12px 25px rgba(177, 156, 217, 0.2);
+        }
+        
+        .layer-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .layer-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-color);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            margin-right: 20px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 10px rgba(168, 216, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .layer:hover .layer-number {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .layer-title {
+            font-weight: bold;
+            color: #6a5acd;
+            font-size: 1.6rem;
+            display: inline-block;
+        }
+        
+        .layer:nth-child(1) { border-left-color: #ffb6c1; } /* Rosa pastel */
+        .layer:nth-child(2) { border-left-color: #fffacd; } /* Amarillo pastel */
+        .layer:nth-child(3) { border-left-color: #ffcccb; } /* Rojo pastel */
+        .layer:nth-child(4) { border-left-color: #a8d8ea; } /* Azul pastel */
+        .layer:nth-child(5) { border-left-color: #b19cd9; } /* Lila pastel */
+        .layer:nth-child(6) { border-left-color: #c8a2c8; } /* Morado pastel */
+        .layer:nth-child(7) { border-left-color: #ffb6c1; } /* Rosa pastel */
+        
+        .layer:nth-child(1) .layer-number { background: #ffb6c1; }
+        .layer:nth-child(2) .layer-number { background: #fffacd; color: #5d5d5d; }
+        .layer:nth-child(3) .layer-number { background: #ffcccb; }
+        .layer:nth-child(4) .layer-number { background: #a8d8ea; }
+        .layer:nth-child(5) .layer-number { background: #b19cd9; }
+        .layer:nth-child(6) .layer-number { background: #c8a2c8; }
+        .layer:nth-child(7) .layer-number { background: #ffb6c1; }
+        
+        .image-container {
+            text-align: center;
+            margin: 2.5rem 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        
+        .image-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient);
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            transition: transform 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .image-container:hover img {
+            transform: scale(1.03);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            margin: 2.5rem 0;
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2.5rem 0;
+            box-shadow: var(--shadow);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .comparison-table th, .comparison-table td {
+            padding: 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .comparison-table th {
+            background: var(--gradient);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .comparison-table tr:hover {
+            background-color: #f0f8ff;
+        }
+        
+        .benefits-list {
+            list-style-type: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .benefits-list li {
+            padding: 1.5rem;
+            background: var(--card-gradient);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(177, 156, 217, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 4rem;
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        .benefits-list li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(177, 156, 217, 0.15);
+        }
+        
+        .benefits-list li:before {
+            content: "✓";
+            color: var(--secondary-color);
+            font-weight: bold;
+            position: absolute;
+            left: 1.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .data-flow {
+            background: var(--card-gradient);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 2.5rem 0;
+        }
+        
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+            width: 100%;
+            max-width: 700px;
+        }
+        
+        .flow-direction {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-light);
+            color: #5d5d5d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 1.5rem;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.4);
+            z-index: 2;
+            position: relative;
+        }
+        
+        .flow-description {
+            flex: 1;
+            padding: 1.8rem;
+            background: var(--card-gradient);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(177, 156, 217, 0.1);
+            border-left: 4px solid var(--secondary-color);
+        }
+        
+        footer {
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+            padding: 3rem 0;
+            margin-top: 4rem;
+            clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+        
+        .social-link:hover {
+            background: white;
+            color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+        
+        .resources {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            margin: 2.5rem 0;
+            justify-content: center;
+        }
+        
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            background: var(--gradient-light);
+            color: #5d5d5d;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 182, 193, 0.3);
+        }
+        
+        .resource-link:hover {
+            background: var(--dark-color);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(200, 162, 200, 0.4);
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, rgba(177, 156, 217, 0.2) 0%, rgba(168, 216, 234, 0.2) 100%);
+            padding: 0.2rem 0.7rem;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #6a5acd;
+        }
+        
+        .protocol-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .protocol-item {
+            background: var(--card-gradient);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(177, 156, 217, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--secondary-color);
+        }
+        
+        .protocol-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(177, 156, 217, 0.15);
+        }
+        
+        .quiz-container {
+            background: var(--card-gradient);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin: 2.5rem 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .quiz-question {
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            color: #6a5acd;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .quiz-option {
+            padding: 1.2rem;
+            background: var(--card-gradient);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 5px rgba(177, 156, 217, 0.1);
+        }
+        
+        .quiz-option:hover {
+            background: #f0f8ff;
+            transform: translateX(5px);
+        }
+        
+        .quiz-option.correct {
+            background: #e6f7f0;
+            border-left: 4px solid #98fb98;
+        }
+        
+        .quiz-option.incorrect {
+            background: #fde8e8;
+            border-left: 4px solid #ffcccb;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .flow-step {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .flow-direction {
+                margin: 1rem 0;
+                transform: rotate(90deg);
+            }
+            
+            .benefits-list {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                clip-path: polygon(0 0, 100% 0, 100% 90%, 0 100%);
+                padding: 3rem 0;
+            }
+            
+            footer {
+                clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <h1><i class="fas fa-network-wired"></i> MODELO OSI</h1>
+            <p class="intro">Este modelo facilita la interoperabilidad entre diferentes sistemas y redes.</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <nav class="nav-container">
+            <div class="nav-links">
+                <a href="#que-es" class="nav-link"><i class="fas fa-info-circle"></i> ¿Qué es?</a>
+                <a href="#importancia" class="nav-link"><i class="fas fa-star"></i> Importancia</a>
+                <a href="#funcionamiento" class="nav-link"><i class="fas fa-cogs"></i> Funcionamiento</a>
+                <a href="#capas" class="nav-link"><i class="fas fa-layer-group"></i> Las 7 Capas</a>
+                <a href="#transito-datos" class="nav-link"><i class="fas fa-exchange-alt"></i> Flujo de Datos</a>
+                <a href="#osi-vs-tcpip" class="nav-link"><i class="fas fa-balance-scale"></i> OSI vs TCP/IP</a>
+                <a href="#beneficios" class="nav-link"><i class="fas fa-check-circle"></i> Beneficios</a>
+                <a href="#recursos" class="nav-link"><i class="fas fa-book"></i> Recursos</a>
+            </div>
+        </nav>
+        
+        <section id="que-es">
+            <div class="card">
+                <h2><i class="fas fa-info-circle"></i> ¿Qué es el Modelo OSI?</h2>
+                <p>El <span class="highlight">Modelo OSI (Open Systems Interconnection)</span> es un marco de referencia conceptual desarrollado por la <a href="https://www.iso.org/es/home"><span class="highlight">Organización Internacional de Normalización (ISO)</span></a> en 1984. Este modelo divide el complejo proceso de comunicación en red en siete capas abstractas, cada una con funciones específicas e independientes.</p>
+                <p>A diferencia de los protocolos específicos, el modelo OSI no es una implementación concreta, sino una <span class="highlight">guía arquitectónica</span> que permite a los desarrolladores crear productos de red interoperables, independientemente del fabricante o la tecnología subyacente.</p>
+                <p>El modelo surgió como respuesta a la necesidad de estandarizar las comunicaciones entre sistemas heterogéneos, permitiendo que equipos de diferentes fabricantes pudieran comunicarse sin problemas.</p>
+                
+                <div class="image-container">
+                    <img src="https://guimi.net/monograficos/G-Redes_de_comunicaciones/imgs/ISO-OSI.png" alt="Modelo OSI - 7 Capas" width="600">
+                    <p>Representación visual de las 7 capas del Modelo OSI</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="importancia">
+            <div class="card">
+                <h2><i class="fas fa-star"></i> ¿Por qué es importante el Modelo OSI?</h2>
+                <p>El Modelo OSI es fundamental en el mundo de las redes por varias razones clave:</p>
+                <ul class="benefits-list">
+                    <li><strong>Estándar Universal:</strong> Proporciona un marco común para la comunicación en red a nivel mundial</li>
+                    <li><strong>Interoperabilidad:</strong> Facilita la comunicación entre productos de diferentes fabricantes</li>
+                    <li><strong>Modularidad:</strong> Divide el proceso complejo de comunicación en partes manejables</li>
+                    <li><strong>Especialización:</strong> Permite a los desarrolladores enfocarse en capas específicas</li>
+                    <li><strong>Resolución de Problemas:</strong> Simplifica la identificación y corrección de errores</li>
+                    <li><strong>Base Educativa:</strong> Sirve como fundamento para la enseñanza de redes de computadoras</li>
+                    <li><strong>Evolución Tecnológica:</strong> Permite actualizar componentes sin afectar todo el sistema</li>
+                    <li><strong>Documentación:</strong> Proporciona un lenguaje común para describir funciones de red</li>
+                </ul>
+                
+                <div class="image-container">
+                    <img src="https://e8137e3dc7.cbaul-cdnwnd.com/662472bb0a5260946e0aad3b4b3c5019/200000038-3076c31723/sesion.jpg" alt="Importancia del Modelo OSI" width="600">
+                    <p>El modelo OSI como base para la interoperabilidad entre sistemas</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="funcionamiento">
+            <div class="card">
+                <h2><i class="fas fa-cogs"></i> ¿Cómo funciona el Modelo OSI?</h2>
+                <p>El Modelo OSI opera mediante un proceso de <span class="highlight">encapsulación y desencapsulación</span> de datos a medida que viajan a través de las capas. Cada capa añade su información de control específica (encabezado) a los datos originales, creando una estructura anidada.</p>
+                
+                <div class="data-flow">
+                    <h3>Flujo de datos a través del Modelo OSI</h3>
+                    <div class="flow-diagram">
+                        <div class="flow-step">
+                            <div class="flow-description">
+                                <strong><i class="fas fa-play-circle"></i> Origen:</strong> Los datos comienzan en la capa de aplicación (7) y descienden secuencialmente a través de todas las capas
+                            </div>
+                            <div class="flow-direction"><i class="fas fa-arrow-down"></i></div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-description">
+                                <strong><i class="fas fa-box"></i> Encapsulación:</strong> Cada capa añade su propio encabezado (PDU) a los datos, excepto la capa física que trabaja con bits
+                            </div>
+                            <div class="flow-direction"><i class="fas fa-arrow-down"></i></div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-description">
+                                <strong><i class="fas fa-bolt"></i> Transmisión:</strong> En la capa física, los datos se convierten en señales (eléctricas, ópticas, radio) y se transmiten por el medio
+                            </div>
+                            <div class="flow-direction"><i class="fas fa-arrow-right"></i></div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-description">
+                                <strong><i class="fas fa-sign-in-alt"></i> Destino:</strong> Los datos ascienden a través de las capas, eliminando los encabezados en cada nivel (desencapsulación)
+                            </div>
+                            <div class="flow-direction"><i class="fas fa-arrow-up"></i></div>
+                        </div>
+                        <div class="flow-step">
+                            <div class="flow-description">
+                                <strong><i class="fas fa-check-circle"></i> Procesamiento:</strong> Cada capa procesa la información de su encabezado correspondiente y entrega los datos a la capa superior
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3>Unidades de Datos del Protocolo (PDU)</h3>
+                <p>Cada capa del modelo OSI maneja los datos con una denominación específica:</p>
+                <div class="protocol-list">
+                    <div class="protocol-item">Capa 7-5: <strong>Datos</strong></div>
+                    <div class="protocol-item">Capa 4: <strong>Segmentos</strong> (TCP) / <strong>Datagramas</strong> (UDP)</div>
+                    <div class="protocol-item">Capa 3: <strong>Paquetes</strong></div>
+                    <div class="protocol-item">Capa 2: <strong>Tramas</strong></div>
+                    <div class="protocol-item">Capa 1: <strong>Bits</strong></div>
+                </div>
+
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/E0S19bRzr6g" title="Funcionamiento del Modelo OSI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+            </div>
+        </section>
+        
+        <section id="capas">
+            <div class="card">
+                <h2><i class="fas fa-layer-group"></i> Las 7 Capas del Modelo OSI</h2>
+                <p>El Modelo OSI está compuesto por siete capas, organizadas en dos grupos principales:</p>
+                <ul>
+                    <li><strong>Capas de Aplicación (1-4):</strong> Se enfocan en el transporte de datos de extremo a extremo</li>
+                    <li><strong>Capas de Medio (5-7):</strong> Se enfocan en las aplicaciones y el procesamiento de datos</li>
+                </ul>
+                
+                <div class="layers-container">
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">7</span> <span class="layer-title">Capa de Aplicación</span></h3>
+                            <p>Es la interfaz directa entre el usuario y la red. Proporciona servicios de red a las aplicaciones del usuario final como navegadores web, clientes de correo electrónico y aplicaciones de mensajería.</p>
+                            <p><strong>Funciones principales:</strong> Interfaz de usuario, identificación de servicios, autenticación.</p>
+                            <p><strong>Protocolos:</strong> HTTP, HTTPS, FTP, SMTP, DNS, DHCP, SNMP.</p>
+                            <p><strong>Dispositivos:</strong> Gateways, servidores.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">6</span> <span class="layer-title">Capa de Presentación</span></h3>
+                            <p>Se encarga de la representación, codificación y transformación de los datos. Asegura que la información enviada por la capa de aplicación de un sistema sea legible para la capa de aplicación de otro sistema.</p>
+                            <p><strong>Funciones principales:</strong> Traducción, cifrado, compresión.</p>
+                            <p><strong>Ejemplos:</strong> Conversión ASCII-EBCDIC, SSL/TLS, compresión GIF/JPEG.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">5</span> <span class="layer-title">Capa de Sesión</span></h3>
+                            <p>Establece, gestiona y finaliza las conexiones (sesiones) entre aplicaciones. Controla el diálogo entre computadoras, determinando cuándo comenzar, pausar, reanudar o terminar una sesión de comunicación.</p>
+                            <p><strong>Funciones principales:</strong> Establecimiento de sesión, coordinación de diálogo, sincronización.</p>
+                            <p><strong>Protocolos:</strong> NetBIOS, RPC, PPTP.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">4</span> <span class="layer-title">Capa de Transporte</span></h3>
+                            <p>Proporciona transferencia confiable y transparente de datos entre sistemas finales. Ofrece control de flujo, segmentación, multiplexación y detección/corrección de errores.</p>
+                            <p><strong>Funciones principales:</strong> Segmentación, control de flujo, detección de errores.</p>
+                            <p><strong>Protocolos:</strong> TCP (orientado a conexión), UDP (no orientado a conexión).</p>
+                        </div>
+                    </div>
+                    
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">3</span> <span class="layer-title">Capa de Red</span></h3>
+                            <p>Se encarga del direccionamiento lógico y el enrutamiento de paquetes a través de múltiples redes. Determina la mejor ruta para enviar los datos desde el origen al destino.</p>
+                            <p><strong>Funciones principales:</strong> Direccionamiento lógico, enrutamiento, fragmentación.</p>
+                            <p><strong>Protocolos:</strong> IP, ICMP, IPSec, OSPF, BGP.</p>
+                            <p><strong>Dispositivos:</strong> Routers, capa 3 switches.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">2</span> <span class="layer-title">Capa de Enlace de Datos</span></h3>
+                            <p>Proporciona transferencia confiable de datos a través del medio físico. Detecta y posiblemente corrige errores que puedan ocurrir en la capa física. Divide los datos en tramas.</p>
+                            <p><strong>Funciones principales:</strong> Direccionamiento físico, control de acceso al medio, detección de errores.</p>
+                            <p><strong>Protocolos:</strong> Ethernet, PPP, HDLC, Frame Relay.</p>
+                            <p><strong>Dispositivos:</strong> Switches, bridges, puntos de acceso wireless.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="layer">
+                        <div class="layer-content">
+                            <h3><span class="layer-number">1</span> <span class="layer-title">Capa Física</span></h3>
+                            <p>Transmite el flujo de bits sin procesar a través del medio físico. Define las características eléctricas, mecánicas, procedimentales y funcionales para activar, mantener y desactivar el enlace físico.</p>
+                            <p><strong>Funciones principales:</strong> Transmisión de bits, especificación de medios, topología.</p>
+                            <p><strong>Ejemplos:</strong> Cable UTP, fibra óptica, ondas de radio, conectores RJ45.</p>
+                            <p><strong>Dispositivos:</strong> Hubs, repetidores, medios de transmisión.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="image-container">
+                    <img src="https://datageneral.co/wp-content/uploads/2023/12/Capas-modelo-OSI.png" alt="Funciones de cada capa del Modelo OSI" width="600">
+                    <p>Detalle de las funciones específicas de cada capa del Modelo OSI</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="transito-datos">
+            <div class="card">
+                <h2><i class="fas fa-exchange-alt"></i> Cómo transitan los datos a través del Modelo OSI</h2>
+                <p>El proceso de comunicación en el Modelo OSI sigue un patrón específico de encapsulación y desencapsulación:</p>
+                
+                <h3>Proceso de Encapsulación (Origen)</h3>
+                <ol>
+                    <li><strong>Capa 7 (Aplicación):</strong> Los datos del usuario se convierten en datos de aplicación</li>
+                    <li><strong>Capa 6 (Presentación):</strong> Los datos se cifran, comprimen o formatean</li>
+                    <li><strong>Capa 5 (Sesión):</strong> Se añade información de control de sesión</li>
+                    <li><strong>Capa 4 (Transporte):</strong> Los datos se segmentan y se añaden encabezados TCP/UDP</li>
+                    <li><strong>Capa 3 (Red):</strong> Se añaden direcciones IP y se crean paquetes</li>
+                    <li><strong>Capa 2 (Enlace de datos):</strong> Se añaden direcciones MAC y se crean tramas</li>
+                    <li><strong>Capa 1 (Física):</strong> Las tramas se convierten en bits para transmisión</li>
+                </ol>
+                
+                <h3>Proceso de Desencapsulación (Destino)</h3>
+                <ol>
+                    <li><strong>Capa 1 (Física):</strong> Los bits se reciben y convierten en tramas</li>
+                    <li><strong>Capa 2 (Enlace de datos):</strong> Se verifica la integridad de las tramas y se eliminan encabezados MAC</li>
+                    <li><strong>Capa 3 (Red):</strong> Se eliminan encabezados IP y se reensamblan paquetes si es necesario</li>
+                    <li><strong>Capa 4 (Transporte):</strong> Se eliminan encabezados TCP/UDP y se reensamblan segmentos</li>
+                    <li><strong>Capa 5 (Sesión):</strong> Se gestiona la sesión de comunicación</li>
+                    <li><strong>Capa 6 (Presentación):</strong> Los datos se descifran, descomprimen o reformatean</li>
+                    <li><strong>Capa 7 (Aplicación):</strong> Los datos se entregan a la aplicación destinataria</li>
+                </ol>
+                
+                <p>Este proceso asegura que cada capa solo se comunique con su capa equivalente en el otro sistema (comunicación peer-to-peer), creando una comunicación lógica entre capas pares a través de los protocolos correspondientes.</p>
+                
+            </div>
+        </section>
+        
+        <section id="osi-vs-tcpip">
+            <div class="card">
+                <h2><i class="fas fa-balance-scale"></i> OSI frente a TCP/IP</h2>
+                <p>Aunque el Modelo OSI es un estándar teórico ampliamente enseñado, en la práctica, el conjunto de protocolos TCP/IP es el más utilizado en Internet. Aquí una comparación detallada:</p>
+                
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Modelo OSI</th>
+                            <th>Modelo TCP/IP</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Capa 7: Aplicación</strong></td>
+                            <td><strong>Capa de Aplicación</strong></td>
+                            <td>En TCP/IP, esta capa combina las funciones de las capas 5, 6 y 7 del modelo OSI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Capa 6: Presentación</strong></td>
+                            <td><strong>Capa de Aplicación</strong></td>
+                            <td>Las funciones de presentación (cifrado, compresión) se integran en la capa de aplicación</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Capa 5: Sesión</strong></td>
+                            <td><strong>Capa de Aplicación</strong></td>
+                            <td>La gestión de sesiones se maneja en la capa de aplicación o en protocolos específicos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Capa 4: Transporte</strong></td>
+                            <td><strong>Capa de Transporte</strong></td>
+                            <td>Funciones similares en ambos modelos (TCP para conexiones confiables, UDP para no confiables)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Capa 3: Red</strong></td>
+                            <td><strong>Capa de Internet</strong></td>
+                            <td>Funciones similares, enfocadas en el direccionamiento lógico y enrutamiento (protocolo IP)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Capa 2: Enlace de datos</strong></td>
+                            <td><strong>Capa de Acceso a la Red</strong></td>
+                            <td>En TCP/IP, esta capa combina las funciones de las capas 1 y 2 del modelo OSI</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Capa 1: Física</strong></td>
+                            <td><strong>Capa de Acceso a la Red</strong></td>
+                            <td>Las especificaciones físicas se incluyen en la capa de acceso a la red</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <h3>Ventajas de cada modelo</h3>
+                <div class="benefits-list">
+                    <div>
+                        <h4>Ventajas del Modelo OSI</h4>
+                        <ul>
+                            <li>Separación clara de funciones entre capas</li>
+                            <li>Modelo genérico aplicable a cualquier tecnología</li>
+                            <li>Excelente para enseñanza y comprensión</li>
+                            <li>Estándar internacional reconocido</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4>Ventajas del Modelo TCP/IP</h4>
+                        <ul>
+                            <li>Ampliamente implementado en Internet</li>
+                            <li>Modelo práctico y probado</li>
+                            <li>Menos capas, más simple de implementar</li>
+                            <li>Protocolos maduros y estables</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="beneficios">
+            <div class="card">
+                <h2><i class="fas fa-check-circle"></i> Beneficios del Modelo OSI</h2>
+                <p>El Modelo OSI ofrece numerosas ventajas en el diseño, implementación y mantenimiento de redes:</p>
+                
+                <ul class="benefits-list">
+                    <li><strong>Interoperabilidad Universal:</strong> Permite que equipos de diferentes fabricantes y tecnologías se comuniquen eficientemente</li>
+                    <li><strong>Diseño Modular:</strong> Cada capa puede desarrollarse, actualizarse y repararse independientemente</li>
+                    <li><strong>Estandarización Internacional:</strong> Proporciona un marco común para el desarrollo de protocolos y dispositivos</li>
+                    <li><strong>Resolución Eficiente de Problemas:</strong> Facilita la identificación y corrección de errores al aislar funciones por capas</li>
+                    <li><strong>Herramienta Pedagógica:</strong> Sirve como base fundamental para la enseñanza de redes de computadoras</li>
+                    <li><strong>Flexibilidad Tecnológica:</strong> Permite la evolución de componentes sin afectar todo el sistema</li>
+                    <li><strong>Documentación Estandarizada:</strong> Proporciona un lenguaje común para describir funciones y problemas de red</li>
+                    <li><strong>Competencia Saludable:</strong> Fomenta la innovación al permitir a múltiples fabricantes desarrollar productos compatibles</li>
+                </ul>
+                
+                <div class="image-container">
+                    <img src="MODELO.jpeg" alt="Beneficios del Modelo OSI" width="600">
+                    <p>El modelo OSI como base para el desarrollo de tecnologías de red</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="recursos">
+            <div class="card">
+                <h2><i class="fas fa-book"></i> Recursos Adicionales</h2>
+                <p>Para profundizar en el conocimiento del Modelo OSI y las redes de computadoras, te recomendamos los siguientes recursos:</p>
+                
+                <div class="resources">
+                    <a href="https://www.iso.org/standard/20269.html" class="resource-link" target="_blank"><i class="fas fa-external-link-alt"></i> Estándar Oficial ISO</a>
+                    <a href="https://www.cisco.com/c/en/us/solutions/enterprise-networks/what-is-the-osi-model.html" class="resource-link" target="_blank"><i class="fas fa-external-link-alt"></i> Guía Cisco sobre OSI</a>
+                    <a href="https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/" class="resource-link" target="_blank"><i class="fas fa-external-link-alt"></i> Explicación de Cloudflare</a>
+                    <a href="https://www.geeksforgeeks.org/layers-of-osi-model/" class="resource-link" target="_blank"><i class="fas fa-external-link-alt"></i> Tutorial Detallado</a>
+                    <a href="https://www.comptia.org/content/guides/what-is-the-osi-model" class="resource-link" target="_blank"><i class="fas fa-external-link-alt"></i> Guía CompTIA</a>
+                    <a href="https://www.javatpoint.com/osi-model" class="resource-link" target="_blank"><i class="fas fa-external-link-alt"></i> Ejemplos Prácticos</a>
+                </div>
+                
+                <h3>Videos Explicativos</h3>
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/CRdL1PcherM" title="Funcionamiento detallado del Modelo OSI" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+
+                <div class="video-container">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/MqpIJLmMny8" title="Comparación Modelo OSI y TCP/IP" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                
+            </div>
+        </section>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2025 Modelo OSI - Todos los derechos reservados</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Efectos interactivos para la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Efecto de scroll suave para los enlaces de navegación
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+            
+            // Animación de aparición para las capas
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateX(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            // Aplicar a las capas
+            document.querySelectorAll('.layer').forEach(layer => {
+                layer.style.opacity = 0;
+                layer.style.transform = 'translateX(-20px)';
+                layer.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                observer.observe(layer);
+            });
+            
+            // Efecto de aparición para las tarjetas
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.opacity = 0;
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            const cardObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = 1;
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.card').forEach(card => {
+                cardObserver.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
